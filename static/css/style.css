@@ -1,0 +1,35 @@
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.bg-nav{
+    background: #ff0084;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #33001b, #ff0084);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #33001b, #ff0084); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.mt-100{
+    margin-top:100px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    }
+
+.navbar-brand span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.navbar-brand h4 {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.navbar-brand h5 {
+    font-size: 10pt;
+}
+
+

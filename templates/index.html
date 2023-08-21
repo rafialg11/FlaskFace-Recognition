@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "head.html" %}
+</head>
+<body>
+
+{% include "navbar.html" %}
+
+<section class="py-5">
+    <div class="row justify-content-md-center">
+        <div class="jumbotron col-lg-10 py-3">
+          <h1 class="display-5">Selamat Datang!</h1>
+          <p class="lead">Selamat datang di Aplikasi Absensi Guru Berbasis Face Recognition! Sekarang, absensi guru lebih mudah dari sebelumnya. Guru hanya perlu tersenyum ke kamera, dan aplikasi ini akan mengenali secara otomatis.</p>
+          <hr class="my-4">
+          <p>Sebelum menggunakan absensi, pastikan data beserta wajah sudah didaftarkan terlebih dahulu.</p>
+          <p class="lead">
+            <a href="/fr_page" class="btn btn-primary btn-lg" role="button">Buka Absensi Harian</a>
+          </p>
+        </div>
+        <div class="col-lg-10">
+            <h3>Data Personil</h3>
+            <hr>
+            <div class="row">
+                <div class="col-lg-4">
+                    <a href="/addprsn" type="button" class="btn btn-success btn-lg"><b>Tambah Data</b></a>
+                </div>
+            </div>
+
+            <br>
+            <table class="table" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nama</th>
+                        <th>NIP</th>
+                        <th>Active</th>
+                        <th>Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{item[0]}}</td>
+                            <td>{{item[1]}}</td>
+                            <td>{{item[2]}}</td>
+                            <td>{{item[3]}}</td>
+                            <td>{{item[4]}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

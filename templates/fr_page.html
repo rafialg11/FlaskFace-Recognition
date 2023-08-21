@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "head.html" %}
+</head>
+<body >
+
+{% include "navbar.html" %}
+
+<div class="container-fluid">
+    <div class="row mt-3 mb-5">
+        <div class="col-md-7">
+            <img src="{{ url_for('video_feed') }}" width="100%" class="img-thumbnail">
+        </div>
+        <div class="col-md-5" style="height:500px; overflow-y:auto;">
+            <a href="/" class="btn btn-primary btn-md mb-3">
+                Kembali ke Halaman Utama
+            </a>
+            <h3>Absensi Hari ini</h3>
+                <p id="real-time-clock"></p>
+            <table class="table" >
+                <thead>
+                    <tr>
+                        <th>Id #</th>
+                        <th>Nama</th>
+                        <th>NIP</th>
+                        <th>Jam Masuk</th>
+                    </tr>
+                </thead>
+                <tbody id="scandata">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function updateClock() {
+        const currentTime = new Date();
+        const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const dayOfWeek = daysOfWeek[currentTime.getDay()]; // Mendapatkan nama hari
+        const date = currentTime.getDate(); // Mendapatkan tanggal
+        const month = currentTime.getMonth() + 1; // Mendapatkan bulan (Januari dimulai dari 0)
+        const year = currentTime.getFullYear(); // Mendapatkan tahun
+        const hours = String(currentTime.getHours()).padStart(2, "0"); // Mengatur format jam menjadi "00"
+        const minutes = String(currentTime.getMinutes()).padStart(2, "0"); // Mengatur format menit menjadi "00"
+        const seconds = String(currentTime.getSeconds()).padStart(2, "0"); // Mengatur format detik menjadi "00"
+
+        const formattedTime = `${dayOfWeek}, ${date}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('real-time-clock').textContent = `Waktu Sekarang: ${formattedTime}`;
+    }
+
+    // Memanggil fungsi updateClock setiap detik (1000 milidetik)
+    setInterval(updateClock, 1000);
+
+    // Memanggil updateClock secara langsung saat halaman dimuat
+    updateClock();
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    $(document).ready(function() {
+        let lastcnt = 0;
+        let cnt;
+        chkNewScan();
+
+        function chkNewScan() {
+            countTodayScan();
+            setTimeout(chkNewScan, 1000);
+        }
+
+        function countTodayScan() {
+            $.ajax({
+                url: '/countTodayScan',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    cnt = data.rowcount;
+                    if (cnt > lastcnt) {
+                        reloadTable();
+                    }
+
+                    lastcnt = cnt;
+                },
+                error: function(result){
+                    console.log('no result!')
+                }
+            })
+        }
+
+        function reloadTable() {
+            $.ajax({
+                url: '/loadData',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    var tr = $("#scandata");
+                    tr.empty();
+
+                    $.each(response, function(index, item) {
+                        if (item.length > 0) {
+                            for (let i = 0; i < item.length; i++) {
+                                tr.append('<tr>'+
+                                                '<td>'+item[i][1]+'</td>'+
+                                                '<td>'+item[i][2]+'</td>'+
+                                                '<td>'+item[i][3]+'</td>'+
+                                                '<td>'+item[i][4]+'</td>'+
+                                           '</tr>');
+                            }
+                        }
+                    });
+                },
+                error: function(result){
+                    console.log('no result!')
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
